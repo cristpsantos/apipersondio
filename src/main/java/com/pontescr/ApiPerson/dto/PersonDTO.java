@@ -1,13 +1,15 @@
 package com.pontescr.ApiPerson.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.pontescr.ApiPerson.entities.Person;
 
-public class PersonDTO {
-
+public class PersonDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String firstName;
 	private String lastName;	
@@ -19,14 +21,17 @@ public class PersonDTO {
 	public PersonDTO() {
 	}
 
-	public PersonDTO(Long id, String firstName, String lastName, String cpf, LocalDate birthDate) {
+	public PersonDTO(Long id, String firstName, String lastName, String cpf, LocalDate birthDate,
+			List<PhoneDTO> phones) {
+		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
+		this.phones = phones;
 	}
-	
+
 	public PersonDTO(Person person) {
 		id = person.getId();
 		firstName = person.getFirstName();

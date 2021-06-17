@@ -1,8 +1,8 @@
 package com.pontescr.ApiPerson.entities;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.pontescr.ApiPerson.dto.PersonDTO;
 
 @Entity
 public class Person {
@@ -32,13 +34,21 @@ public class Person {
 	private LocalDate birthDate;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-	private List<Phone> phones = new ArrayList<>();
+	private List<Phone> phones;
 	
 	public Person() {		
 	}
 
+	public Person(PersonDTO personDTO) {
+		id = personDTO.getId();
+		firstName = personDTO.getFirstName();
+		lastName = personDTO.getLastName();
+		cpf = personDTO.getCpf();
+		birthDate = personDTO.getBirthDate();
+		phones = personDTO.getPhones().stream().map(x -> new Phone(x)).collect(Collectors.toList());
+	}
+	
 	public Person(Long id, String firstName, String lastName, String cpf, LocalDate birthDate) {
-		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -114,5 +124,4 @@ public class Person {
 			return false;
 		return true;
 	}
-
 }

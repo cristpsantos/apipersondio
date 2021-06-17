@@ -3,17 +3,14 @@ package com.pontescr.ApiPerson.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pontescr.ApiPerson.dto.PersonDTO;
-import com.pontescr.ApiPerson.dto.PhoneDTO;
 import com.pontescr.ApiPerson.entities.Person;
-import com.pontescr.ApiPerson.entities.Phone;
+import com.pontescr.ApiPerson.exception.PersonNotFoundException;
 import com.pontescr.ApiPerson.repositories.PersonRepository;
-import com.pontescr.ApiPerson.repositories.PhoneRepository;
 
 @Service
 public class PersonService {
@@ -21,22 +18,27 @@ public class PersonService {
 	@Autowired
 	private PersonRepository repository;
 	
-	@Autowired
-	private PhoneRepository phoneRepository;
-	
 	@Transactional
 	public PersonDTO insert(PersonDTO dto) {
-		Person person = new Person(null, dto.getFirstName(), dto.getLastName(), dto.getCpf(), dto.getBirthDate());
-		for(PhoneDTO ph : dto.getPhones()) {
-			Phone phone = phoneRepository.getById(ph.getId());
-			person.getPhones().add(phone);			
-		}
-		person = repository.save(person);
+		Person person = new Person(dto);
+		repository.save(person);
 		return new PersonDTO(person);
 	}
 	
+	@Transactional(readOnly = true)
 	public List<PersonDTO> findAll() {
 		List<Person> person = repository.findAll();
 		return person.stream().map(x -> new PersonDTO(x)).collect(Collectors.toList());
 	}
+	
+	@Transactional(readOnly = true)
+	public PersonDTO findById(Long id) throws PersonNotFoundException {
+		Person person = verifyIfExists(id);
+		return new PersonDTO(person);
+	}
+	
+    private Person verifyIfExists(Long id) throws PersonNotFoundException {
+        return repository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+    }
 }

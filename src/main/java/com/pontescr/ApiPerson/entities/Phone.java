@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
+import com.pontescr.ApiPerson.dto.PhoneDTO;
 import com.pontescr.ApiPerson.enums.PhoneType;
 
 @Entity
@@ -24,6 +24,18 @@ public class Phone {
 	
 	public Phone() {
 		
+	}
+	
+	public Phone(PhoneDTO phoneDTO) {
+		id = phoneDTO.getId();
+		phoneType = phoneDTO.getPhoneType();
+		number = phoneDTO.getNumber();
+	}
+	
+	public Phone(Long id, PhoneType phoneType, String number) {
+		this.id = id;
+		this.phoneType = phoneType;
+		this.number = number;
 	}
 
 	public Long getId() {
