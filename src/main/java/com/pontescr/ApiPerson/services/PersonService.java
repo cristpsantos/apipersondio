@@ -25,6 +25,14 @@ public class PersonService {
 		return new PersonDTO(person);
 	}
 	
+	@Transactional
+	public PersonDTO updateById(Long id, PersonDTO dto) throws PersonNotFoundException {
+		verifyIfExists(id);
+		Person person = new Person(dto);
+		repository.save(person);
+		return new PersonDTO(person);
+	}
+	
 	@Transactional(readOnly = true)
 	public List<PersonDTO> findAll() {
 		List<Person> person = repository.findAll();
@@ -35,6 +43,12 @@ public class PersonService {
 	public PersonDTO findById(Long id) throws PersonNotFoundException {
 		Person person = verifyIfExists(id);
 		return new PersonDTO(person);
+	}
+	
+	@Transactional
+	public void deleteById(Long id) throws PersonNotFoundException {
+		verifyIfExists(id);
+		repository.deleteById(id);
 	}
 	
     private Person verifyIfExists(Long id) throws PersonNotFoundException {
