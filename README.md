@@ -6,7 +6,7 @@
 
 - Criado um CRUD básico com chave única para o CPF conforme orientações do treinamento;
 
-- Nesse exemplo de API não foram usados as bibliotecas Lombo e Mapper, pois para fins de aprendizado criei cada GET/SET e os construtores manualmente.
+- Nesse exemplo de API não foram usados as bibliotecas Lombo e Mapper, pois para fins de aprendizado criei cada Getters/Setters e os construtores manualmente.
 
 
 
